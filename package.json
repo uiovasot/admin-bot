@@ -1,0 +1,23 @@
+{
+    "name": "silon-bot",
+    "module": "index.ts",
+    "type": "module",
+    "scripts": {
+        "dev": "bun --watch run index.ts",
+        "prettier": "prettier --write ."
+    },
+    "dependencies": {
+        "@prisma/client": "^6.1.0",
+        "discord.js": "^14.16.3",
+        "mysql2": "^3.11.4",
+        "openai": "^4.77.0",
+        "prisma": "^6.1.0"
+    },
+    "devDependencies": {
+        "prettier": "^3.3.3",
+        "@types/bun": "latest"
+    },
+    "peerDependencies": {
+        "typescript": "^5.0.0"
+    }
+}

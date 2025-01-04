@@ -1,0 +1,134 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:../data.db"
+}
+
+model FishingHistories {
+  id        Int      @id @default(autoincrement())
+  userId    String  
+  channelId String  
+  fishName  String   
+  fishType  String?
+  fishRate  String?
+  length    Float?   
+  price     Int
+  caughtAt  DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model FishingSpots {
+  channelId          String   @id 
+  reputation         Int      @default(0)
+  cleanliness        Int      @default(0)
+  fee                Int      @default(0)
+  terrain            Int      @default(0)
+  minPurchasePrice   Int      @default(0)
+  ownerId            String?
+  isPurchaseDisabled Boolean  @default(false)
+  facilities         Facility[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Facility {
+  id                    String        @id 
+  name                  String    
+  fishingSpotchannelId  String    
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+
+  fishingSpot FishingSpots @relation(fields: [fishingSpotchannelId], references: [channelId])
+}
+
+model ServerLists {
+  id        String   @id 
+  name      String 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Users {
+  id          String   @id
+  username    String 
+  fishCaught  Int      @default(0)
+  money       Int      @default(0)
+  totalAssets Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ConversationLog {
+  id          Int   @id @default(autoincrement())
+  userId      String
+
+  role        String
+  message     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model EmergencyStatus {
+  id        String   @id @default(cuid())
+  guildId  String   @unique
+  isEmergency Boolean @default(false)
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model AdminRole {
+  id      Int    @id @default(autoincrement())
+  guildId String @unique
+  roleId  String
+}
+
+model TicketCategory {
+  id        Int    @id @default(autoincrement())
+  guildId   String @unique
+  categoryId String
+}
+
+model UserExperience {
+  id        Int      @id @default(autoincrement())
+  userId    String  
+  guildId  String 
+  @@unique([userId, guildId])
+  experience BigInt      @default(0)
+  level      Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RoleBoost {
+  id        Int      @id @default(autoincrement())
+  roleId    String  
+  guildId  String  
+  boost     Float   
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RoleReward {
+  id        Int      @id @default(autoincrement())
+  level     Int     
+  roleId    String   
+  guildId  String   
+  @@unique([roleId, guildId, level])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Settings {
+  id                  Int      @id @default(autoincrement())
+  guildId            String    @unique
+  messageExperience   Int      @default(5) 
+  messageCooldown     Int      @default(60)
+  voiceChannelExperience Int   @default(10)
+  voiceInterval       Int      @default(5)  
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
